@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleVectorGraphicEditor
@@ -17,15 +13,33 @@ namespace SimpleVectorGraphicEditor
             InitializeComponent();
         }
 
-        const int GRID_SIZE = 20;
+        public enum Tools { Line, Circle, Rectangle }
+
+        #region Declarations
+
+        /// <summary>
+        /// Размер ячейки секи
+        /// </summary>
+        private const int GRID_SIZE = 20;
+
         private List<TShape> _shapes = new List<TShape>();
         private TShape _shape = null;
         private TPoint _pointer = new TPoint();
         private bool _captured = false;
-        Tools _selectedTool = Tools.Circle;
+        private Size grid = new Size(GRID_SIZE, GRID_SIZE);
+        private Size halfGrid = new Size(0, 0);
+        private Tools _selectedTool = Tools.Circle;
+
+        #endregion Declarations
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            var rect = Screen.GetBounds(this);
+            this.Width = (int)(rect.Width * 0.75);
+            this.Height = (int)(rect.Height * 0.75);
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.splitContainer2.Dock = DockStyle.Fill;
+
             toolLine.Tag = Tools.Line;
             toolCircle.Tag = Tools.Circle;
             toolRectangle.Tag = Tools.Rectangle;
@@ -45,14 +59,9 @@ namespace SimpleVectorGraphicEditor
 
             this.BackColor = formColor;
 
-            TCircle circle = new TCircle(new Point(100, 100), 50);
+            TCircle circle = new TCircle(new Point(200, 200), 75);
 
             _shapes.Add(circle);
-
-            circle = new TCircle(new Point(200, 200), 75);
-
-            _shapes.Add(circle);
-
         }
 
         private void ToolButton_Click(object sender, EventArgs e)
@@ -63,6 +72,7 @@ namespace SimpleVectorGraphicEditor
             }
             catch (Exception ex)
             {
+                Trace.WriteLine(ex.Message);
                 _selectedTool = Tools.Line;
             }
         }
@@ -82,7 +92,6 @@ namespace SimpleVectorGraphicEditor
             _pointer.Draw(e.Graphics);
             base.OnPaint(e);
         }
-
 
         private void BOX_MouseDown(object sender, MouseEventArgs e)
         {
@@ -119,9 +128,7 @@ namespace SimpleVectorGraphicEditor
             }
 
             base.OnMouseDown(e);
-
         }
-
 
         private void BOX_MouseMove(object sender, MouseEventArgs e)
         {
@@ -134,7 +141,6 @@ namespace SimpleVectorGraphicEditor
 
             base.OnMouseMove(e);
         }
-
 
         private void BOX_MouseUp(object sender, MouseEventArgs e)
         {
@@ -154,37 +160,16 @@ namespace SimpleVectorGraphicEditor
             base.OnMouseUp(e);
         }
 
-
         private Point UpdateCursor(Point e)
         {
-            var rx = e.X % GRID_SIZE;
-            var ry = e.Y % GRID_SIZE;
-            var x = e.X;
-            var y = e.Y;
-
-            if (rx <= GRID_SIZE / 2)
-            {
-                x = e.X - rx;
-            }
-            else
-            {
-                x = e.X + GRID_SIZE - rx;
-            }
-
-            if (ry <= GRID_SIZE / 2)
-            {
-                y = e.Y - ry;
-            }
-            else
-            {
-                y = e.Y + GRID_SIZE - ry;
-            }
-
-            _pointer.Origin = new Point(x, y);
+            halfGrid = new Size(grid.Width / 2, grid.Height / 2);
+            var snapX = ((e.X + halfGrid.Width) / grid.Width) * grid.Width;
+            var snapY = ((e.Y + halfGrid.Height) / grid.Height) * grid.Height;
+            _pointer.OriginX = snapX;
+            _pointer.OriginY = snapY;
             box.Invalidate();
             return _pointer.Origin;
         }
-
 
         private void UpdateEllipseUnderConstruction(Point point)
         {
@@ -221,9 +206,7 @@ namespace SimpleVectorGraphicEditor
 
             box.Invalidate();
             // Invalidate(); // Notify operating system that we need to be repainted.
-
         }
-
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
@@ -234,10 +217,10 @@ namespace SimpleVectorGraphicEditor
         {
             _selectedTool = Tools.Rectangle;
         }
+
+        private void FormMain_Resize(object sender, EventArgs e)
+        {
+            box.Invalidate();
+        }
     }
-
-
-    public enum Tools { Line, Circle, Rectangle }
-
-
 }

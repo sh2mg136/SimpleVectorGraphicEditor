@@ -28,23 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.box = new System.Windows.Forms.PictureBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.box = new System.Windows.Forms.PictureBox();
+            this.toolLine = new System.Windows.Forms.ToolStripButton();
             this.toolCircle = new System.Windows.Forms.ToolStripButton();
             this.toolRectangle = new System.Windows.Forms.ToolStripButton();
-            this.toolLine = new System.Windows.Forms.ToolStripButton();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolSelectorFrame = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolBtnSave = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.box)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.box)).BeginInit();
             this.SuspendLayout();
             // 
             // richTextBox1
@@ -52,27 +53,13 @@
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Location = new System.Drawing.Point(0, 0);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(764, 108);
+            this.richTextBox1.Size = new System.Drawing.Size(424, 40);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 51);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(937, 465);
-            this.splitContainer1.SplitterDistance = 169;
-            this.splitContainer1.TabIndex = 2;
-            // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Location = new System.Drawing.Point(12, 54);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -83,29 +70,20 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.richTextBox1);
-            this.splitContainer2.Size = new System.Drawing.Size(764, 465);
-            this.splitContainer2.SplitterDistance = 353;
+            this.splitContainer2.Size = new System.Drawing.Size(424, 277);
+            this.splitContainer2.SplitterDistance = 233;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // box
-            // 
-            this.box.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.box.Location = new System.Drawing.Point(0, 0);
-            this.box.Name = "box";
-            this.box.Size = new System.Drawing.Size(764, 353);
-            this.box.TabIndex = 0;
-            this.box.TabStop = false;
-            this.box.Paint += new System.Windows.Forms.PaintEventHandler(this.BOX_Paint);
-            this.box.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BOX_MouseDown);
-            this.box.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BOX_MouseMove);
-            this.box.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BOX_MouseUp);
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolBtnSave,
+            this.toolStripSeparator2,
             this.toolLine,
             this.toolCircle,
-            this.toolRectangle});
+            this.toolRectangle,
+            this.toolStripSeparator1,
+            this.toolSelectorFrame});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -113,11 +91,34 @@
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // box
+            // 
+            this.box.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.box.Location = new System.Drawing.Point(0, 0);
+            this.box.Name = "box";
+            this.box.Size = new System.Drawing.Size(424, 233);
+            this.box.TabIndex = 0;
+            this.box.TabStop = false;
+            this.box.Paint += new System.Windows.Forms.PaintEventHandler(this.BOX_Paint);
+            this.box.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BOX_MouseDown);
+            this.box.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BOX_MouseMove);
+            this.box.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BOX_MouseUp);
+            // 
+            // toolLine
+            // 
+            this.toolLine.AutoSize = false;
+            this.toolLine.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolLine.Image = global::SimpleVectorGraphicEditor.Properties.Resources.substract;
+            this.toolLine.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolLine.Name = "toolLine";
+            this.toolLine.Size = new System.Drawing.Size(48, 48);
+            this.toolLine.Text = "toolStripButton1";
+            // 
             // toolCircle
             // 
             this.toolCircle.AutoSize = false;
             this.toolCircle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolCircle.Image = global::SimpleVectorGraphicEditor.Properties.Resources.address_blue;
+            this.toolCircle.Image = global::SimpleVectorGraphicEditor.Properties.Resources.ellipse;
             this.toolCircle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolCircle.Name = "toolCircle";
             this.toolCircle.Size = new System.Drawing.Size(48, 48);
@@ -128,43 +129,60 @@
             // 
             this.toolRectangle.AutoSize = false;
             this.toolRectangle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolRectangle.Image = global::SimpleVectorGraphicEditor.Properties.Resources.credit_card_amex;
+            this.toolRectangle.Image = global::SimpleVectorGraphicEditor.Properties.Resources.photo_frame;
             this.toolRectangle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolRectangle.Name = "toolRectangle";
             this.toolRectangle.Size = new System.Drawing.Size(48, 48);
             this.toolRectangle.Text = "toolStripButton2";
             this.toolRectangle.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
-            // toolLine
+            // toolStripSeparator1
             // 
-            this.toolLine.AutoSize = false;
-            this.toolLine.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolLine.Image = global::SimpleVectorGraphicEditor.Properties.Resources.attachment;
-            this.toolLine.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolLine.Name = "toolLine";
-            this.toolLine.Size = new System.Drawing.Size(48, 48);
-            this.toolLine.Text = "toolStripButton1";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 51);
+            // 
+            // toolSelectorFrame
+            // 
+            this.toolSelectorFrame.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolSelectorFrame.Image = ((System.Drawing.Image)(resources.GetObject("toolSelectorFrame.Image")));
+            this.toolSelectorFrame.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolSelectorFrame.Name = "toolSelectorFrame";
+            this.toolSelectorFrame.Size = new System.Drawing.Size(23, 48);
+            this.toolSelectorFrame.Text = "toolStripButton1";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 51);
+            // 
+            // toolBtnSave
+            // 
+            this.toolBtnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolBtnSave.Image = ((System.Drawing.Image)(resources.GetObject("toolBtnSave.Image")));
+            this.toolBtnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolBtnSave.Name = "toolBtnSave";
+            this.toolBtnSave.Size = new System.Drawing.Size(23, 48);
+            this.toolBtnSave.Text = "Save";
+            this.toolBtnSave.ToolTipText = "Save";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(937, 516);
-            this.Controls.Add(this.splitContainer1);
+            this.ClientSize = new System.Drawing.Size(937, 401);
+            this.Controls.Add(this.splitContainer2);
             this.Controls.Add(this.toolStrip1);
             this.Name = "FormMain";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.Resize += new System.EventHandler(this.FormMain_Resize);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.box)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.box)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -174,12 +192,15 @@
 
         private System.Windows.Forms.PictureBox box;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolCircle;
         private System.Windows.Forms.ToolStripButton toolRectangle;
         private System.Windows.Forms.ToolStripButton toolLine;
+        private System.Windows.Forms.ToolStripButton toolBtnSave;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolSelectorFrame;
     }
 }
 

@@ -10,6 +10,7 @@ namespace SimpleVectorGraphicEditor
     public class TPoint : TShape
     {
         Point _origin = new Point();
+        Pen _pen = Pens.Lime;
 
         public override Point Origin
         {
@@ -19,11 +20,21 @@ namespace SimpleVectorGraphicEditor
 
         public override int Width => 4;
 
-        Pen pen = Pens.Lime;
+        public int OriginX
+        {
+            get => _origin.X;
+            set => _origin.X = value;
+        }
+
+        public int OriginY
+        {
+            get => _origin.Y;
+            set => _origin.Y = value;
+        }
 
         public override void Draw(Graphics graphics)
         {
-            graphics.DrawRectangle(pen, new Rectangle(Origin.X - 4, Origin.Y - 4, 8, 8));
+            graphics.DrawRectangle(_pen, new Rectangle(Origin.X - 4, Origin.Y - 4, 8, 8));
         }
     }
 }

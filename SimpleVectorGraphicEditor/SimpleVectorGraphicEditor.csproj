@@ -68,11 +68,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TCircle.cs" />
-    <Compile Include="TLine.cs" />
-    <Compile Include="TPoint.cs" />
-    <Compile Include="TRectangle.cs" />
-    <Compile Include="TShape.cs" />
+    <Compile Include="Models\TCircle.cs" />
+    <Compile Include="Models\TLine.cs" />
+    <Compile Include="Models\TPoint.cs" />
+    <Compile Include="Models\TRectangle.cs" />
+    <Compile Include="Models\TShape.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,6 +122,18 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\substract.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\oval.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ellipse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\photo-frame.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
