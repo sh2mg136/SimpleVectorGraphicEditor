@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SimpleVectorGraphicEditor
@@ -59,9 +60,13 @@ namespace SimpleVectorGraphicEditor
 
             this.BackColor = formColor;
 
-            TCircle circle = new TCircle(new Point(200, 200), 75);
-
+            TCircle circle = new TCircle(new TPoint(60, 60), 80);
             _shapes.Add(circle);
+
+            TLine line = new TLine(new TPoint(-20, -20), new TPoint(40, 40));
+            _shapes.Add(line);
+
+            TGrid.SetCenter(box.Width / 2, box.Height / 2);
         }
 
         private void ToolButton_Click(object sender, EventArgs e)
@@ -80,16 +85,21 @@ namespace SimpleVectorGraphicEditor
         private void BOX_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Wheat);
-            Grid.Draw(e.Graphics, box.Width, box.Height);
+
+            TGrid.Draw(e.Graphics, box.Width, box.Height, GRID_SIZE);
+
             foreach (TShape shape in _shapes)
             {
-                shape.Draw(e.Graphics);
+                shape.Draw(e.Graphics, TGrid.Origin);
             }
+
             if (_shape != null)
             {
-                _shape.Draw(e.Graphics);
+                _shape.Draw(e.Graphics, TGrid.Origin);
             }
-            _pointer.Draw(e.Graphics);
+
+            _pointer.Draw(e.Graphics, TGrid.Origin);
+
             base.OnPaint(e);
         }
 
@@ -97,10 +107,11 @@ namespace SimpleVectorGraphicEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                // Capture = true;
                 _captured = true;
 
                 var p = UpdateCursor(e.Location);
+
+                SetText(p.ToString(), false);
 
                 switch (_selectedTool)
                 {
@@ -136,7 +147,7 @@ namespace SimpleVectorGraphicEditor
 
             if (_captured)
             {
-                UpdateEllipseUnderConstruction(p);
+                UpdateShapeUnderConstruction(p);
             }
 
             base.OnMouseMove(e);
@@ -148,7 +159,8 @@ namespace SimpleVectorGraphicEditor
             {
                 _captured = false;
                 var p = UpdateCursor(e.Location);
-                UpdateEllipseUnderConstruction(p);
+                Task.Run(() => SetText(p.ToString(), false));
+                UpdateShapeUnderConstruction(p);
                 if (_shape.Width > 0)
                 {
                     _shapes.Add(_shape);
@@ -160,23 +172,60 @@ namespace SimpleVectorGraphicEditor
             base.OnMouseUp(e);
         }
 
-        private Point UpdateCursor(Point e)
+        private TPoint UpdateCursor(Point e)
         {
             halfGrid = new Size(grid.Width / 2, grid.Height / 2);
-            var snapX = ((e.X + halfGrid.Width) / grid.Width) * grid.Width;
-            var snapY = ((e.Y + halfGrid.Height) / grid.Height) * grid.Height;
+
+            /*
+            var snapX = (((e.X + halfGrid.Width) / grid.Width) * grid.Width);
+            var snapY = (((e.Y + halfGrid.Height) / grid.Height) * grid.Height);
             _pointer.OriginX = snapX;
             _pointer.OriginY = snapY;
+            */
+
+            _pointer.ToUserCoords(e, TGrid.Origin);
+            //var snapX = (((_pointer.OriginX + halfGrid.Width) / grid.Width) * grid.Width);
+            //var snapY = (((_pointer.OriginY + halfGrid.Height) / grid.Height) * grid.Height);
+
+            var snapX = (((_pointer.X - halfGrid.Width) / grid.Width) * grid.Width);
+            var snapY = (((_pointer.Y - halfGrid.Height) / grid.Height) * grid.Height);
+
+
+            //_pointer.ToScreenCoords(snapX, snapY, TGrid.Origin);
+            //_pointer.OriginX = snapX + TGrid.Origin.X;
+            //_pointer.OriginY = snapY + TGrid.Origin.Y;
+            _pointer.X = snapX;
+            _pointer.Y = snapY;
+
             box.Invalidate();
-            return _pointer.Origin;
+
+            /*
+                        Task.Run(() => SetText($@"{_pointer}
+            {TGrid.Origin.X}:{TGrid.Origin.Y}
+            {_pointer.Origin.X - TGrid.Origin.X}:{_pointer.Origin.Y - TGrid.Origin.Y}", true));
+            */
+
+            return _pointer; // .ToUserCoords(TGrid.Origin).Origin;
         }
 
-        private void UpdateEllipseUnderConstruction(Point point)
+        private void SetText(string msg, bool clear)
+        {
+            if (InvokeRequired)
+            {
+                Invoke((Action<string, bool>)SetText, msg, clear);
+                return;
+            }
+            if (clear) richTextBox1.Clear();
+            richTextBox1.AppendText(msg);
+            richTextBox1.AppendText(Environment.NewLine);
+        }
+
+        private void UpdateShapeUnderConstruction(TPoint point)
         {
             if (_shape == null)
                 return;
 
-            Point origin = _shape.Origin;
+            TPoint origin = _shape.Origin;
 
             switch (_selectedTool)
             {
@@ -188,7 +237,7 @@ namespace SimpleVectorGraphicEditor
                     {
                         int xRadius = Math.Abs(origin.X - point.X);
                         int yRadius = Math.Abs(origin.Y - point.Y);
-                        (_shape as TCircle).Radius = Math.Max(xRadius, yRadius);
+                        (_shape as TCircle).Radius = Math.Min(xRadius, yRadius);
                     }
                     break;
 
@@ -202,10 +251,8 @@ namespace SimpleVectorGraphicEditor
 
             // if ((ModifierKeys & Keys.Shift) == 0) xRadius = yRadius = Math.Max(xRadius, yRadius);
 
-            // ellipseConstruction.Ellipse.Rectangle = new Rectangle(origin.X - xRadius, origin.Y - yRadius, xRadius * 2, yRadius * 2);
-
             box.Invalidate();
-            // Invalidate(); // Notify operating system that we need to be repainted.
+
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -220,6 +267,7 @@ namespace SimpleVectorGraphicEditor
 
         private void FormMain_Resize(object sender, EventArgs e)
         {
+            TGrid.SetCenter(box.Width / 2, box.Height / 2);
             box.Invalidate();
         }
     }

@@ -1,36 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace SimpleVectorGraphicEditor
 {
-    
     public class TCircle : TShape
     {
+        private TPoint _origin = new TPoint();
+        private Rectangle _rect;
+        private Rectangle _rectCenter;
+        private Color _color = Color.Black;
+        private int _radius = 0;
+        private int _width = 1;
 
-        Point _origin = new Point();
-        Rectangle _rect;
-        Rectangle _rectCenter;
-        Color _color = Color.Black;
-        int _radius = 0;
-        int _width = 1;
-
-        public TCircle(Point origin, int radius)
+        public TCircle(TPoint origin, int radius)
         {
-            _origin = origin;
+            _origin = new TPoint(origin.P);
             _radius = radius;
             _width = base.GetRandomWidth();
             _color = base.GetRandomColor();
 
             _rect = new Rectangle(origin.X - radius, origin.Y - radius, radius * 2, radius * 2);
 
-            RectCenter = new Rectangle(origin.X - 2, origin.Y - 2, 4, 4);
+            //RectCenter = new Rectangle(origin.X - 2, origin.Y - 2, 4, 4);
         }
 
-        public override Point Origin
+        public override TPoint Origin
         {
             get
             {
@@ -54,24 +47,28 @@ namespace SimpleVectorGraphicEditor
             }
         }
 
-        public Rectangle RectCenter { get => _rectCenter; set => _rectCenter = value; }
+        // public Rectangle RectCenter { get => _rectCenter; set => _rectCenter = value; }
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Graphics graphics, Point gridCenter)
         {
             Brush brush = Brushes.Gray;
 
+            /*
             using (Pen pen = new Pen(Color.Gray, 1))
             {
                 pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
                 graphics.DrawRectangle(pen, RectCenter);
             }
+            */
 
             using (Pen pen = new Pen(_color, _width))
             {
-                graphics.DrawEllipse(pen, Rect);
+                graphics.DrawEllipse(pen,
+                    Origin.X - Radius + gridCenter.X,
+                    -Origin.Y - Radius + gridCenter.Y,
+                    Radius * 2,
+                    Radius * 2);
             }
         }
-
     }
-
 }

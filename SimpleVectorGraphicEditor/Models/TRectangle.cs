@@ -11,25 +11,25 @@ namespace SimpleVectorGraphicEditor
     public class TRectangle : TShape
     {
 
-        Point _start = new Point();
-        Point _finish = new Point();
+        TPoint _start = new TPoint();
+        TPoint _finish = new TPoint();
 
         Rectangle _rect;
 
         Color _color = Color.Black;
         int _width = 1;
 
-        public TRectangle(Point start, Point finish)
+        public TRectangle(TPoint start, TPoint finish)
         {
             _start = start;
             _finish = finish;
             _width = base.GetRandomWidth();
             _color = base.GetRandomColor();
 
-            _rect = new Rectangle(_start, new Size(Math.Abs(_finish.X - _start.X), Math.Abs(_finish.Y - _start.Y)));
+            _rect = new Rectangle(_start.X, _start.Y, Math.Abs(_finish.X - _start.X), Math.Abs(_finish.Y - _start.Y));
         }
 
-        public override Point Origin
+        public override TPoint Origin
         {
             get
             {
@@ -41,7 +41,7 @@ namespace SimpleVectorGraphicEditor
             }
         }
 
-        public Point Finish
+        public TPoint Finish
         {
             get
             {
@@ -67,7 +67,7 @@ namespace SimpleVectorGraphicEditor
         }
 
 
-        public override void Draw(Graphics graphics)
+        public override void Draw(Graphics graphics, Point origin)
         {
             using (Pen pen = new Pen(Color.Gray, 1))
             {
